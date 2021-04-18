@@ -2,7 +2,7 @@ from flask import request, render_template, url_for, redirect, Flask, jsonify, m
 from flask_cors import CORS
 
 from model_wrappers import books_wrapper, authors_wrapper, subs_wrapper, loans_wrapper, \
-    subscriptions_wrapper, categories_wrapper
+    subscriptions_wrapper, categories_wrapper, book_types_wrapper
 
 # enable CORS
 from models import app
@@ -17,7 +17,7 @@ def books():
         return jsonify(books)
     elif request.method == 'POST':
         book = request.json
-        if not books_wrapper.valid(book) and not authors_wrapper.valid(book['author']):
+        if not books_wrapper.valid(book) or not authors_wrapper.valid(book['author']):
             return make_response(), 400
         new_book = books_wrapper.add(book)
         return jsonify(new_book['id'])
@@ -153,6 +153,19 @@ def category(id):
             return make_response(), 500
 
         return make_response(), 200
+
+
+@app.route('/book_types', methods=['GET', 'POST'])
+def book_types():
+    if request.method == 'GET':
+        types = book_types_wrapper.get_all()
+        return jsonify(types)
+    elif request.method == 'POST':
+        book_type = request.json
+        if not book_types_wrapper.valid(book_type):
+            return make_response(), 400
+        book_type = book_types_wrapper.add(book_type)
+        return jsonify(book_type['id'])
 
 
 if __name__ == '__main__':

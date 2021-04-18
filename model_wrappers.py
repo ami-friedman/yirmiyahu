@@ -10,7 +10,7 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import and_
 
 from canon import TimeUnits
-from models import Book, db, Subscriber, Loan, Author, Subscription, EmailTracker, Category
+from models import Book, db, Subscriber, Loan, Author, Subscription, EmailTracker, Category, BookType
 
 
 class ModelWrapperBase:
@@ -47,12 +47,13 @@ class ModelWrapperBase:
 class Books(ModelWrapperBase):
     def __init__(self, db: SQLAlchemy, model):
         super().__init__(db, model)
-        self._valid_keys = ['title', 'author', 'category']
+        self._valid_keys = ['title', 'author', 'category', 'book_type']
 
     def add(self, new_item: Dict) -> Dict:
         author = authors_wrapper.add(new_item['author'])
         category = Category.query.get(new_item['category']['id'])
-        book = Book(title=new_item['title'].title(), author_id=author['id'], category=category)
+        book_type = BookType.query.get(new_item['book_type']['id'])
+        book = Book(title=new_item['title'].title(), author_id=author['id'], category=category, book_type=book_type)
         db.session.add(book)
         try:
             db.session.commit()
@@ -65,9 +66,10 @@ class Books(ModelWrapperBase):
             return Book.query.filter_by(title=new_item['title'].title()).first().to_dict()
 
     def update(self, id: str, updated_item: Dict):
-        book = self._model.query.get(id)
+        book: Book = self._model.query.get(id)
         book.title = updated_item['title']
         book.category_id = updated_item['category']['id']
+        book.book_type_id = updated_item['book_type']['id']
 
         db.session.add(book)
 
@@ -142,6 +144,7 @@ class Subscribers(ModelWrapperBase):
         if loans:
             sub['loans'] = [{'loan_id': loan.Loan.id,
                              'title': loan.Book.title,
+                             'book_type_name': loan.Book.book_type.name if loan.Book.book_type else None,
                              'loan_date': datetime.fromtimestamp(loan.Loan.loan_date).strftime('%b %d %Y') if loan.Loan.loan_date else loan.Loan.loan_date,
                              'due_date': datetime.fromtimestamp(loan.Loan.due_date).strftime('%b %d %Y') if loan.Loan.due_date else loan.Loan.due_date,
                              'return_date': datetime.fromtimestamp(loan.Loan.return_date).strftime('%b %d %Y') if loan.Loan.return_date else loan.Loan.return_date,
@@ -187,12 +190,17 @@ class Loans(ModelWrapperBase):
     def add(self, new_item: Dict) -> List[Dict]:
         for book_to_loan in new_item['books']:
             book = Book.query.get(book_to_loan['id'])
-            now = int(time())
-            due_date = now + 1 * TimeUnits.MONTH_IN_SEC
+            # book_type: BookType = BookType.query.get(book.book_type_id) if book.book_type_id else None
+            if book.book_type:
+                duration = {book.book_type.loan_duration_unit.lower(): +book.book_type.loan_duration}
+                delta = relativedelta(**duration)
+            else:
+                delta = relativedelta(months=1)
+            due_date = self._now + delta
             loan = Loan(book_id=book.id,
                         sub_id=new_item['sub_id'],
-                        loan_date=now,
-                        due_date=due_date)
+                        loan_date=int(self._now.timestamp()),
+                        due_date=int(due_date.timestamp()))
             db.session.add(loan)
             db.session.flush()
             book.loan_id = loan.id
@@ -352,6 +360,24 @@ class Categories(ModelWrapperBase):
             raise
 
 
+class BookTypes(ModelWrapperBase):
+    def __init__(self, db: SQLAlchemy, model):
+        super().__init__(db, model)
+        self._valid_keys = ['name', 'loan_duration', 'loan_duration_unit']
+
+    def add(self, new_item: Dict):
+        book_type = self._model(name=new_item['name'],
+                                loan_duration=new_item['loan_duration'],
+                                loan_duration_unit=new_item['loan_duration_unit'])
+        try:
+            self._db.session.add(book_type)
+            db.session.commit()
+        except sqlalchemy.exc.IntegrityError as _:
+            print('Book type exists! no need to add new one')
+            db.session.rollback()
+        return self._model.query.filter_by(name=new_item['name']).first().to_dict()
+
+
 books_wrapper = Books(db, Book)
 subs_wrapper = Subscribers(db, Subscriber)
 loans_wrapper = Loans(db, Loan)
@@ -359,4 +385,4 @@ authors_wrapper = Authors(db, Author)
 subscriptions_wrapper = Subscriptions(db, Subscription)
 email_trackers = EmailTrackers(db, EmailTracker)
 categories_wrapper = Categories(db, Category)
-
+book_types_wrapper = BookTypes(db, BookType)

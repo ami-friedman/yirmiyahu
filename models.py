@@ -43,6 +43,8 @@ class Book(db.Model):
     loan_id = db.Column(db.Integer, ForeignKey('loan.id'))
     category_id = db.Column(db.Integer, ForeignKey('category.id'))
     category = db.relationship('Category', backref=db.backref('books'), lazy=True)
+    book_type_id = db.Column(db.Integer, ForeignKey('book_type.id'), nullable=False)
+    book_type = db.relationship('BookType', backref=db.backref('books'), lazy=True)
 
     def __repr__(self):
         return f'<Book {self.title}>'
@@ -54,7 +56,8 @@ class Book(db.Model):
             'author_id': self.author_id,
             'loan_id': self.loan_id,
             'author': self.author.to_dict(),
-            'category': self.category.to_dict() if self.category else None
+            'category': self.category.to_dict() if self.category else None,
+            'book_type': self.book_type.to_dict() if self.book_type else None
         }
 
 
@@ -145,4 +148,22 @@ class Category(db.Model):
         return {
             'id': self.id,
             'name': self.name,
+        }
+
+
+class BookType(db.Model):
+    __table_args__ = (
+        db.UniqueConstraint('loan_duration', 'loan_duration_unit', name='unique_type'),
+    )
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    name = db.Column(db.Text, nullable=False, unique=True)
+    loan_duration = db.Column(db.Integer, nullable=False)
+    loan_duration_unit = db.Column(db.Text, nullable=False)
+
+    def to_dict(self) -> Dict:
+        return {
+            'id': self.id,
+            'name': self.name,
+            'loan_duration': self.loan_duration,
+            'loan_duration_unit': self.loan_duration_unit,
         }

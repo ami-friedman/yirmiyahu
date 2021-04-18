@@ -1,0 +1,12 @@
+Generic single-database configuration.
+https://blog.miguelgrinberg.com/post/how-to-add-flask-migrate-to-an-existing-project:
+
+For Dev:
+export DATABASE_URL=postgresql+psycopg2://afriedman@127.0.0.1:5432/library
+
+For Prd:
+export DATABASE_URL=postgres://<user>:<password>@ec2-34-237-89-96.compute-1.amazonaws.com:5432/df88i9fif5b8ph
+
+1. flask db stamp head
+2. flask db migrate
+3. flask db upgrade

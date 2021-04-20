@@ -43,7 +43,7 @@ class Book(db.Model):
     loan_id = db.Column(db.Integer, ForeignKey('loan.id'))
     category_id = db.Column(db.Integer, ForeignKey('category.id'))
     category = db.relationship('Category', backref=db.backref('books'), lazy=True)
-    book_type_id = db.Column(db.Integer, ForeignKey('book_type.id'), nullable=False)
+    book_type_id = db.Column(db.Integer, ForeignKey('book_type.id'), nullable=True)
     book_type = db.relationship('BookType', backref=db.backref('books'), lazy=True)
 
     def __repr__(self):

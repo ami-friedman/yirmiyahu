@@ -35,10 +35,8 @@ EMAIL_BODY = 'The book "{title}" you loaned from Yirmiyahu Library Gemach is due
              '\n' \
              'ושרה בת דוד זלמן ז״ל'
 
-UPCOMING_EMAIL_BODY_HTML = 'Dear {subscriber}' \
+UPCOMING_EMAIL_BODY_HTML = 'Dear Subscriber' \
                            '<br>The book "{title}" you loaned from Yirmiyahu Library Gemach is due on <b>{due_date}</b>.' \
-                           '<br>Please make sure it is returned by the due date during library hours.' \
-                           '<br>For every day the book is late, a fee of 1 shekel per day is incurred.' \
                            '' \
                            '<p>If you wish to renew your book, please email us or call on the days that the library is open.' \
                            '<br>Books may be renewed once for an additional month (except for new books).' \

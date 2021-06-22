@@ -37,8 +37,7 @@ def email_reminder(loans: Tuple, overdue: bool):
         notif = email_trackers.get_by_loan_id(loan_id)
         if notif:
             if time() - notif['last_trigger'] < Config.NOTIFICATION_INTERVAL:
-                continue
-            if not notif['is_overdue']:
+                # We recently notified this subscriber about the upcoming/overdue book
                 continue
         msg = Message(sender=('Yirmiyahu Library', app.config.get("MAIL_USERNAME")),
                       recipients=[email])
@@ -49,7 +48,7 @@ def email_reminder(loans: Tuple, overdue: bool):
         else:
             msg.html = UPCOMING_EMAIL_BODY_HTML.format(title=title,
                                                        due_date=datetime.fromtimestamp(due_date).strftime("%d %B %Y"))
-            msg.subject = f'The book "{title}" is due in 5 days'
+            msg.subject = f'The book "{title}" is due soon'
 
         try:
             print('sending mail')

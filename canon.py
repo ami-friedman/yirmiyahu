@@ -11,9 +11,6 @@ class Config:
     DUE_THRESHOLD = TimeUnits.DAY_IN_SEC * 5
     NOTIFICATION_INTERVAL = TimeUnits.DAY_IN_SEC * 3
 
-class Auth:
-    CLIENT_ID = '980879137585-hh6hgmp8o1bmg45gv6oqb75ugqpmtr11.apps.googleusercontent.com'
-
 
 EMAIL_BODY = 'The book "{title}" you loaned from Yirmiyahu Library Gemach is due on <b>{due_date}</b>.\n' \
              'Please make sure it is returned by the due date during library hours.\n' \

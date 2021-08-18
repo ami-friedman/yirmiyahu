@@ -13,6 +13,26 @@ from models import app
 
 CORS(app, resources={r'/*': {'origins': '*'}})
 
+@app.route('/login', methods=['POST'])
+def login():
+    if request.json is None:
+        return make_response(), 401
+    token = request.json.get('token')
+    try:
+        idinfo = id_token.verify_oauth2_token(token, grequests.Request(), Auth.CLIENT_ID)
+    except ValueError:
+        print('Invalid google login!')
+        return make_response(), 401
+    except Exception:
+        print('Something went wrong with the connection')
+        return make_response(), 500
+
+    if idinfo['email'] not in ['amishosh@gmail.com', 'shoshi611@gmail.com']:
+        return make_response(), 403
+
+    return make_response(json.dumps(idinfo)), 200
+
+
 @app.route('/books', methods=['GET', 'POST'])
 def books():
     if request.method == 'GET':

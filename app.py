@@ -1,6 +1,10 @@
-from flask import request, render_template, url_for, redirect, Flask, jsonify, make_response
+import json
+from flask import request, jsonify, make_response
 from flask_cors import CORS
+from google.oauth2 import id_token
+from google.auth.transport import requests as grequests
 
+from canon import Auth
 from model_wrappers import books_wrapper, authors_wrapper, subs_wrapper, loans_wrapper, \
     subscriptions_wrapper, categories_wrapper, book_types_wrapper
 
@@ -8,6 +12,25 @@ from model_wrappers import books_wrapper, authors_wrapper, subs_wrapper, loans_w
 from models import app
 
 CORS(app, resources={r'/*': {'origins': '*'}})
+
+@app.route('/login', methods=['POST'])
+def login():
+    if request.json is None:
+        return make_response(), 401
+    token = request.json.get('token')
+    try:
+        idinfo = id_token.verify_oauth2_token(token, grequests.Request(), Auth.CLIENT_ID)
+    except ValueError:
+        print('Invalid google login!')
+        return make_response(), 401
+    except Exception:
+        print('Something went wrong with the connection')
+        return make_response(), 500
+
+    if idinfo['email'] not in ['amishosh@gmail.com', 'shoshi611@gmail.com']:
+        return make_response(), 403
+
+    return make_response(json.dumps(idinfo)), 200
 
 
 @app.route('/books', methods=['GET', 'POST'])

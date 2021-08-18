@@ -178,7 +178,7 @@ def category(id):
         return make_response(), 200
 
 
-@app.route('/book_types', methods=['GET', 'POST'])
+@app.route('/book_types', methods=['GET', 'POST', 'PUT'])
 def book_types():
     if request.method == 'GET':
         types = book_types_wrapper.get_all()
@@ -189,6 +189,30 @@ def book_types():
             return make_response(), 400
         book_type = book_types_wrapper.add(book_type)
         return jsonify(book_type['id'])
+    elif request.method == 'PUT':
+        book_type = request.json
+        if not book_types_wrapper.valid(book_type):
+            return make_response(), 400
+        try:
+            book_types_wrapper.update(id=id, updated_item=book_type)
+        except Exception as _:
+            return make_response(), 500
+
+        return make_response(), 200
+
+
+@app.route('/book_types/<id>', methods=['GET', 'PUT'])
+def book_type(id):
+    if request.method == 'PUT':
+        book_type = request.json
+        if not book_types_wrapper.valid(book_type):
+            return make_response(), 400
+        try:
+            book_types_wrapper.update(id=id, updated_item=book_type)
+        except Exception as _:
+            return make_response(), 500
+
+        return make_response(), 200
 
 
 if __name__ == '__main__':

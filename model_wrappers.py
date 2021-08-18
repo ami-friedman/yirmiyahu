@@ -377,6 +377,20 @@ class BookTypes(ModelWrapperBase):
             db.session.rollback()
         return self._model.query.filter_by(name=new_item['name']).first().to_dict()
 
+    def update(self, id: str, updated_item: Dict):
+        type_ = self._model.query.get(id)
+        type_.name = updated_item['name']
+        type_.loan_duration = updated_item['loan_duration']
+        type_.loan_duration_unit = updated_item['loan_duration_unit']
+
+        db.session.add(type_)
+
+        try:
+            db.session.commit()
+        except Exception as exc:
+            print(f'Something went wrong: {exc}')
+            raise
+
 
 books_wrapper = Books(db, Book)
 subs_wrapper = Subscribers(db, Subscriber)

@@ -1,4 +1,4 @@
-from flask import request, render_template, url_for, redirect, Flask, jsonify, make_response
+from flask import request, jsonify, make_response
 from flask_cors import CORS
 
 from model_wrappers import books_wrapper, authors_wrapper, subs_wrapper, loans_wrapper, \
@@ -155,7 +155,7 @@ def category(id):
         return make_response(), 200
 
 
-@app.route('/book_types', methods=['GET', 'POST', 'PUT'])
+@app.route('/book_types', methods=['GET', 'POST'])
 def book_types():
     if request.method == 'GET':
         types = book_types_wrapper.get_all()
@@ -166,16 +166,8 @@ def book_types():
             return make_response(), 400
         book_type = book_types_wrapper.add(book_type)
         return jsonify(book_type['id'])
-    elif request.method == 'PUT':
-        book_type = request.json
-        if not book_types_wrapper.valid(book_type):
-            return make_response(), 400
-        try:
-            book_types_wrapper.update(id=id, updated_item=book_type)
-        except Exception as _:
-            return make_response(), 500
 
-        return make_response(), 200
+    return make_response(), 200
 
 
 @app.route('/book_types/<id>', methods=['GET', 'PUT'])

@@ -109,7 +109,7 @@ class Loan(db.Model):
     due_date = db.Column(db.Integer, nullable=False)
     original_due_date = db.Column(db.Integer, nullable=True)
     return_date = db.Column(db.Integer)
-    book_id = db.Column(db.Integer, ForeignKey('book.id'), nullable=False)
+    book_id = db.Column(db.Integer, ForeignKey('book.id', use_alter=True), nullable=False)
     sub_id = db.Column(db.Integer, ForeignKey('subscriber.id'), nullable=False)
 
     def to_dict(self) -> Dict:

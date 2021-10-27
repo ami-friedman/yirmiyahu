@@ -13,6 +13,7 @@ from models import app
 
 CORS(app, resources={r'/*': {'origins': '*'}})
 
+
 @app.route('/login', methods=['POST'])
 def login():
     if request.json is None:

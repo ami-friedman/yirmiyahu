@@ -7,6 +7,14 @@ export DATABASE_URL=postgresql+psycopg2://afriedman@127.0.0.1:5432/library
 For Prd:
 export DATABASE_URL=postgres://<user>:<password>@ec2-34-237-89-96.compute-1.amazonaws.com:5432/df88i9fif5b8ph
 
+Note for future me:
+If this is a new laptop then run:
+brew install postgres
+/usr/local/opt/postgres/bin/createuser -s afriedman (might fail saying it already exists)
+brew services restart postgresql
+Download Valentina studio and connect to the default DB showing there
+Create a new table called "library"
+then run these commands from the root of the project
 1. flask db stamp head
 2. flask db migrate
 3. flask db upgrade

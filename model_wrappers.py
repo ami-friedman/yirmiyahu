@@ -114,6 +114,9 @@ class Subscribers(ModelWrapperBase):
         except Exception as exc:
             print(f'Something went wrong: {exc}')
 
+        return subscriber.to_dict()
+
+
     def update(self, id: str, updated_item: Dict):
         sub = Subscriber.query.get(id)
         sub.first_name = updated_item['first_name']

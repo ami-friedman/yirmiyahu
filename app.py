@@ -84,7 +84,7 @@ def subscriptions():
         if not subscriptions_wrapper.valid(subscription):
             return make_response(), 400
         sub = subscriptions_wrapper.add(subscription)
-        return jsonify(sub['id'])
+        return jsonify(sub)
 
 
 @app.route('/subscriptions/<id>', methods=['GET'])

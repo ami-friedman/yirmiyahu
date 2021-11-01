@@ -8,14 +8,14 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import ForeignKey
 
 app = Flask(__name__)
-app.config['CORS_HEADERS'] = 'Content-Type'
-CORS(app, resources={r'/*': {'origins': 'https://yirmiyahu-library.herokuapp.com'}})
 DATABASE_URL = os.environ['DATABASE_URL']
 print('DB_URL:' + DATABASE_URL)
 app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE_URL
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
+CORS(app, resources={r'/*': {'origins': '*'}})
+app.config['CORS_HEADERS'] = 'Content-Type'
 
 
 class Author(db.Model):

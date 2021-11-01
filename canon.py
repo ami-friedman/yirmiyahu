@@ -25,8 +25,8 @@ EMAIL_BODY = 'The book "{title}" you loaned from Yirmiyahu Library Gemach is due
              '' \
              'Phone numbers: 054-675-1195 or 054-587-0906\n\n' \
              '' \
-             'Hours:Monday: 10am-12pm\n' \
-             'Wednesday: 7pm-9pm\n\n' \
+             'Hours:Monday: 10am-11.30am\n' \
+             'Wednesday: 7.30pm-8.30pm\n\n' \
              'Address: Rechov Yirmiyahu 24b/14 (-1)\n\n' \
              '' \
              'Please do not leave any books outside the door.\n\n' \

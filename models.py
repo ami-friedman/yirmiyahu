@@ -9,7 +9,7 @@ from sqlalchemy import ForeignKey
 
 app = Flask(__name__)
 app.config['CORS_HEADERS'] = 'Content-Type'
-CORS(app, resources={r'/*': {'origins': '*'}})
+CORS(app, resources={r'/*': {'origins': 'https://yirmiyahu-library.herokuapp.com'}})
 DATABASE_URL = os.environ['DATABASE_URL']
 print('DB_URL:' + DATABASE_URL)
 app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE_URL

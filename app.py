@@ -1,6 +1,5 @@
 import json
 from flask import request, jsonify, make_response
-from flask_cors import CORS
 from google.oauth2 import id_token
 from google.auth.transport import requests as grequests
 
@@ -10,8 +9,6 @@ from model_wrappers import books_wrapper, authors_wrapper, subs_wrapper, loans_w
 
 # enable CORS
 from models import app
-
-CORS(app, resources={r'/*': {'origins': '*'}})
 
 
 @app.route('/login', methods=['POST'])

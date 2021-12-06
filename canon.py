@@ -50,8 +50,8 @@ UPCOMING_EMAIL_BODY_HTML = 'Dear Subscriber' \
                            '<br>Yirmiyahu Library Gemach' \
                            '' \
                            '<p><b>Hours:</b><br>' \
-                           'Monday: 10am-12pm<br>' \
-                           'Wednesday: 7pm-9pm' \
+                           'Monday: 10am-11.30am<br>' \
+                           'Wednesday: 7.30pm-8.30pm' \
                            '<p><b>Address:</b> Rechov Yirmiyahu 24b/14 (-1)' \
                            '' \
                            '<p><b>Phone numbers:</b>' \
@@ -74,8 +74,8 @@ OVERDUE_EMAIL_BODY_HTML = 'The book "{title}" you loaned from Yirmiyahu Library 
                           ' <br>054-675-1195 or 054-587-0906' \
                           '' \
                           '<p><b>Hours:</b><br>' \
-                          'Monday: 10am-12pm<br>' \
-                          'Wednesday: 7pm-9pm' \
+                          'Monday: 10am-11.30am<br>' \
+                          'Wednesday: 7.30pm-8.30pm' \
                           '' \
                           '<p><b>Address:</b> Rechov Yirmiyahu 24b/14 (-1)' \
                           '' \

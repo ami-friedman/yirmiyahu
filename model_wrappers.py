@@ -148,6 +148,7 @@ class Subscribers(ModelWrapperBase):
             sub['loans'] = [{'loan_id': loan.Loan.id,
                              'title': loan.Book.title,
                              'book_type_name': loan.Book.book_type.name if loan.Book.book_type else None,
+                             'allow_extend': loan.Loan.allow_extend,
                              'loan_date': datetime.fromtimestamp(loan.Loan.loan_date).strftime('%b %d %Y') if loan.Loan.loan_date else loan.Loan.loan_date,
                              'due_date': datetime.fromtimestamp(loan.Loan.due_date).strftime('%b %d %Y') if loan.Loan.due_date else loan.Loan.due_date,
                              'return_date': datetime.fromtimestamp(loan.Loan.return_date).strftime('%b %d %Y') if loan.Loan.return_date else loan.Loan.return_date,
@@ -192,18 +193,22 @@ class Loans(ModelWrapperBase):
 
     def add(self, new_item: Dict) -> List[Dict]:
         for book_to_loan in new_item['books']:
+            allow_extension = True
             book = Book.query.get(book_to_loan['id'])
             # book_type: BookType = BookType.query.get(book.book_type_id) if book.book_type_id else None
             if book.book_type:
                 duration = {book.book_type.loan_duration_unit.lower(): +book.book_type.loan_duration}
                 delta = relativedelta(**duration)
+                if book.book_type.name == 'New':
+                    allow_extension = False
             else:
                 delta = relativedelta(months=1)
             due_date = self._now + delta
             loan = Loan(book_id=book.id,
                         sub_id=new_item['sub_id'],
                         loan_date=int(self._now.timestamp()),
-                        due_date=int(due_date.timestamp()))
+                        due_date=int(due_date.timestamp()),
+                        allow_extend=allow_extension)
             db.session.add(loan)
             db.session.flush()
             book.loan_id = loan.id
@@ -238,6 +243,10 @@ class Loans(ModelWrapperBase):
         loan = self._model.query.get(id)
         loan.original_due_date = loan.due_date
         loan.due_date = loan.due_date + 1 * TimeUnits.MONTH_IN_SEC
+
+        loan.num_extensions += 1
+        if loan.num_extensions == 2:
+            loan.allow_extend = False
 
         db.session.add(loan)
 

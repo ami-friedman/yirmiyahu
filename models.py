@@ -113,6 +113,8 @@ class Loan(db.Model):
     return_date = db.Column(db.Integer)
     book_id = db.Column(db.Integer, ForeignKey('book.id', use_alter=True), nullable=False)
     sub_id = db.Column(db.Integer, ForeignKey('subscriber.id'), nullable=False)
+    allow_extend = db.Column(db.Boolean, default=True)
+    num_extensions = db.Column(db.Integer, default=0)
 
     def to_dict(self) -> Dict:
         return {
@@ -124,6 +126,7 @@ class Loan(db.Model):
             'book_id': self.book_id,
             'return_date': datetime.fromtimestamp(self.return_date).strftime('%b %d %Y') if self.return_date else '',
             'sub_id': self.sub_id,
+            'allow_extend': self.allow_extend,
         }
 
 

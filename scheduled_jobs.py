@@ -20,7 +20,7 @@ mail_settings = {
     "MAIL_USE_TLS": False,
     "MAIL_USE_SSL": True,
     "MAIL_USERNAME": 'yirmiyahu.library@gmail.com',
-    "MAIL_PASSWORD": 'librarygemach8389'
+    "MAIL_PASSWORD": 'Yirmiyahu8389'
 }
 
 app.config.update(mail_settings)

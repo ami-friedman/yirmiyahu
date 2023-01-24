@@ -8,7 +8,7 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import ForeignKey
 
 app = Flask(__name__)
-DATABASE_URL = os.environ['DATABASE_URL']
+DATABASE_URL = os.environ['DB_URL']
 print('DB_URL:' + DATABASE_URL)
 app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE_URL
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False

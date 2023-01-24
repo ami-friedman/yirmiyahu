@@ -17,27 +17,32 @@ class Auth:
 
 
 EMAIL_BODY = 'The book "{title}" you loaned from Yirmiyahu Library Gemach is due on <b>{due_date}</b>.\n' \
-             'Please make sure it is returned by the due date during library hours.\n' \
-             'For every day the book is late, a fee of 1 shekel per day is incurred.\n\n' \
+             'If you wish to renew your book, please email us or call on the days that the library is open.\n' \
+             'Books may be renewed for an additional month (except for new books).\n\n' \
              '' \
-             'If you wish to renew your book, you may call on the days that the library is open.\n' \
-             'Books may be renewed once for an additional month.\n\n' \
+             'Please note: For every week the book is late, a fee of 5nis is incurred.\n\n' \
              '' \
-             'Phone numbers: 054-675-1195 or 054-587-0906\n\n' \
+             'Thank you!\n' \
+             'Yirmiyahu Library Gemach\n\n' \
              '' \
-             'Hours:Monday: 10am-11.30am\n' \
+             'Phone numbers:\n ' \
+             'Shoshi 054-675-1195 or Tova Rina 054-587-0906\n\n' \
+             '' \
+             'Hours:\n' \
+             'Monday: 10am-11.30am\n' \
              'Wednesday: 7.30pm-8.30pm\n\n' \
              'Address: Rechov Yirmiyahu 24b/14 (-1)\n\n' \
              '' \
              'Please do not leave any books outside the door.\n\n' \
              '' \
-             'Thank you!\n\n' \
-             '' \
+             'Thank you!\n' \
              'גמ״ח ספריית ירמיהו' \
              '\n' \
              'לע״נ הרב זאב שמשון בן יעקב טוביה הלוי ז״ל' \
              '\n' \
-             'ושרה בת דוד זלמן ז״ל'
+             'שרה בת דוד זלמן ז״ל'\
+             '\n' \
+             'מרת חיה פעשא בת בצלאל הלוי ע״ה'
 
 UPCOMING_EMAIL_BODY_HTML = 'Dear Subscriber' \
                            '<br>The book "{title}" you loaned from Yirmiyahu Library Gemach is due on <b>{due_date}</b>.' \
